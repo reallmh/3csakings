@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:layout_marginTop="30dp"
+    android:paddingTop="50dp"
+    android:id="@+id/post_err">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="93dp"
+        app:srcCompat="@drawable/ic_err"
+        android:id="@+id/imageView" />
+    <TextView
+        android:text="Sorry,cannot get posts for you ,pull to refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:textAlignment="center"
+        android:textStyle="normal|bold" />
+</LinearLayout>

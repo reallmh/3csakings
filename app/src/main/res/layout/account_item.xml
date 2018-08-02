@@ -1,0 +1,63 @@
+<LinearLayout
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="60dp"
+    android:layout_marginBottom="1dp"
+    android:layout_marginTop="1dp"
+    android:id="@+id/acc_item">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_like_after"
+            android:id="@+id/acc_profile_pic"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:textAlignment="center">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:paddingTop="20dp"
+                android:textStyle="normal|bold"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:id="@+id/acc_name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:theme="@style/Base.Widget.AppCompat.CompoundButton.Switch">
+
+            <Button
+                android:text="follow"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:id="@+id/acc_follow_button"
+                android:layout_weight="1"
+                android:background="@drawable/follow_button"
+                android:textColor="#4995f2" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

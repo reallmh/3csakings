@@ -1,0 +1,74 @@
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/comment_tool_bar" />
+
+        <include layout="@layout/post_item_image"></include>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="0.90"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <view
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            class="android.support.v4.widget.Space"
+            android:id="@+id/view" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/comment_recycler"
+            android:layout_height="match_parent"
+
+            android:layout_marginTop="0dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="0px"
+        android:paddingBottom="0dp"
+        android:layout_height="wrap_content">
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:maxEms="10"
+            android:maxLines="10"
+            android:gravity="top|left"
+            android:id="@+id/edt_comment"
+            android:layout_weight="0.8" />
+
+        <Button
+            android:layout_gravity="right|bottom"
+            android:text="Comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/send_btn"
+            android:layout_weight="2"
+            android:onClick="createComment" />
+
+    </LinearLayout>
+
+</LinearLayout>
+

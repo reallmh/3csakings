@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_user_profile">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/background_light"
+        android:layout_marginTop="10dp">
+
+        <include layout="@layout/profile_info"></include>
+        <LinearLayout
+
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:weightSum="1">
+
+
+            <LinearLayout
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".90">
+
+                <LinearLayout
+                    android:layout_weight=".30"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center">
+
+                    <TextView
+                        android:text="views"
+                        android:layout_gravity="center|start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:layout_margin="4dp"
+                        android:layout_marginRight="0dp"></TextView>
+
+                    <TextView
+                        android:text="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txt_views_count"
+                        android:layout_weight="1"
+                        android:layout_gravity="start|center"
+                        android:layout_margin="4dp"
+                        android:textStyle="normal|bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="58dp"
+                    android:layout_weight=".30">
+
+                    <TextView
+                        android:text="posts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sgdfg"
+                        android:layout_margin="4dp"
+                        />
+
+                    <TextView
+                        android:text="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txt_posts_count"
+                        android:layout_weight="1"
+                        android:layout_margin="4dp"
+                        android:layout_gravity="center|start"
+                        android:textStyle="normal|bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight=".30"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txt_follower_count">
+
+                    <TextView
+                        android:text="followers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textVadfafiew11"
+                        android:layout_weight="1"
+                        android:layout_margin="4dp"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:text="0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txt_followers_count"
+                        android:layout_weight="1"
+                        android:layout_margin="4dp"
+                        android:layout_gravity="center|start"
+                        android:textStyle="normal|bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:text="follow"
+                android:id="@+id/btn_profile_follow"
+                android:layout_gravity="right"
+                android:textAllCaps="false"
+                android:textAlignment="center"
+                android:background="@drawable/follow_button"
+                android:layout_weight="0.24"
+                android:layout_width="wrap_content"
+                android:textColor="#4995f2"
+                android:textStyle="normal|bold"
+                android:layout_height="30dp"
+                android:onClick="onFollowButtonClick" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/profile_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                app:tabIndicatorColor="@android:color/holo_blue_dark" />
+
+            <include layout="@layout/content_tab_profile"
+                android:layout_width="match_parent"
+                android:layout_height="1000dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

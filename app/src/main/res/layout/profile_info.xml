@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pf_bio"
+        android:layout_margin="5dp"
+        android:padding="10dp" />
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <LinearLayout
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAlignment="center">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_people_outline_black_24dp"
+                android:layout_weight="1"
+                android:id="@+id/img_gender" />
+
+            <TextView
+                android:text="unspecified"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/pf_gender"
+                android:layout_weight="1"
+                android:textAlignment="textStart" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_weight="2.7"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_school_black_24dp"
+                android:id="@+id/imageView2"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="unspecified"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/pf_year"
+                android:textAlignment="textStart" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_school_black_24dp"
+                android:id="@+id/img_major"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="unspecified"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/pf_major"
+                android:layout_weight="1"
+                android:textAlignment="textStart" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

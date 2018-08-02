@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_create_post"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="io.lmh.e.a3cs_akings.CreatePost">
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity=""
+        app:srcCompat="@drawable/ic_chevron_left_black_24dp"
+        app:backgroundTint="@android:color/white"
+        app:rippleColor="?attr/colorPrimary"
+        android:onClick="onExitPost"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right|end"
+        app:srcCompat="@drawable/ic_paper_plane"
+        app:backgroundTint="@android:color/white"
+        app:rippleColor="?attr/colorPrimary"
+        android:onClick="onCreatePost"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp">
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:orientation="vertical"
+          android:layout_height="match_parent">
+
+          <LinearLayout
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="top"
+              android:background="@drawable/bg_create_post">
+
+              <EditText
+                  android:layout_weight="2"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:inputType="textMultiLine"
+                  android:maxLines="10"
+                  android:ems="9"
+                  android:id="@+id/edt_post_text"
+                  android:hint="what are you thinking?"
+                  android:textCursorDrawable="?android:attr/textCursorDrawable"
+                  android:textColorLink="?attr/actionModeSplitBackground"
+                  android:textAlignment="viewStart" />
+
+              <ImageView
+                  app:srcCompat="@drawable/ic_menu_gallery"
+                  android:id="@+id/imageView3"
+                  android:layout_weight="1"
+                  android:onClick="onChooseImage"
+                  android:layout_width="30dp"
+                  android:layout_height="30dp" />
+
+          </LinearLayout>
+
+          <ImageView
+              android:id="@+id/img_post"
+              android:layout_width="300dp"
+              android:layout_height="200dp" />
+      </LinearLayout>
+
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>
