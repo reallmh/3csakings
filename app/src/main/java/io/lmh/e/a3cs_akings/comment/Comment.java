@@ -284,7 +284,7 @@ public class Comment extends AppCompatActivity {
                                 int comCount = Integer.parseInt(comments) + 1;
                                 post.setComments(Integer.toString(comCount));
                                 postComment.setText(post.getComments());
-                                UIStatic.showSnack(commentActivity.getWindow(), "commented to" + comment.getAcc_name() + "'s account", "success");
+                                UIStatic.showSnack(commentActivity.getWindow(), "commented to" + post.getAcc_name() + "'s account", "success");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

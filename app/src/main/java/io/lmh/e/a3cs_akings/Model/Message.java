@@ -15,7 +15,7 @@ public class Message {
         this.m_message = m_message;
     }
 
-    public Message(String m_id, String m_sender, String m_receiver, String m_date, String m_message) {
+    public Message(String m_id, String m_sender, String m_receiver,String m_message,String m_date) {
         this.m_id = m_id;
         this.m_sender = m_sender;
         this.m_receiver = m_receiver;

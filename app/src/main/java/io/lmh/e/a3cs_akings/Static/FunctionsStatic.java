@@ -69,7 +69,6 @@ public class FunctionsStatic {
                 Calendar cal=new GregorianCalendar();
                 cal.setTime(date);
                 int year=cal.get(Calendar.YEAR);
-                System.out.println();
             returnedDate=date.getDate()+":"+date.getMonth()+":"+year;
             }
         } catch (ParseException e) {

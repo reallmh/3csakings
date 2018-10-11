@@ -19,8 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/holo_blue_dark"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:logo="@drawable/exit" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"

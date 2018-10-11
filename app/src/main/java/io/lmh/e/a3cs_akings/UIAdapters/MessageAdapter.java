@@ -3,75 +3,89 @@ package io.lmh.e.a3cs_akings.UIAdapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.QuickContactBadge;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import UI.CircleTransformation;
+import io.lmh.e.a3cs_akings.Message.MessageActivity;
 import io.lmh.e.a3cs_akings.Model.Message;
+import io.lmh.e.a3cs_akings.Model.MessageItem;
+import io.lmh.e.a3cs_akings.Model.Post;
 import io.lmh.e.a3cs_akings.R;
-
+import io.lmh.e.a3cs_akings.Static.FunctionsStatic;
 
 /**
- * Created by E on 5/20/2018.
+ * Created by E on 8/6/2018.
  */
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder>{
-    //initialize vars
+public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Message> messages;
-    private Intent intent;
     private Context context;
-    private SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferences;
 
-    @Override
-    public void setHasStableIds(boolean hasStableIds) {
-        super.setHasStableIds(hasStableIds);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return super.getItemId(position);
-    }
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message, parent, false);
-        return new MyViewHolder(itemView);
-
+    public MessageAdapter(Context context, List<Message> mess) {
+        this.context = context;
+        this.messages = mess;
+        setHasStableIds(true);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        Message message=messages.get(position);
+        sharedPreferences=context.getSharedPreferences("accountInfo", Context.MODE_PRIVATE);
+        String userId=sharedPreferences.getString("USERID","");
+
+        if(message.getM_sender().equals(userId)){
+            return 1;
+        }else {
+            return 2;
+        }
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View sender= LayoutInflater.from(parent.getContext()).inflate(R.layout.send_msg_item, parent, false);
+        View receiver=LayoutInflater.from(parent.getContext()).inflate(R.layout.receive_msg_item,parent,false);
+      switch (viewType){
+          case 1:
+              return new SendMessageViewHolder(sender);
+          case 2:
+             return new  ReceiveMessageViewHolder(receiver);
+      }
+      System.out.println("null is returned");
+      return null;
 
-        Message message=messages.get(position);
+    }
 
-        holder.id.setText(message.getM_id());
-        holder.sender.setText(message.getM_sender());
-        holder.receiver.setText(message.getM_receiver());
-        holder.body.setText(message.getM_message());
-        holder.date.setText(message.getM_date());
-        //shared pref
-        sharedPreferences= context.getSharedPreferences("myprefs", Context.MODE_PRIVATE);
-        String userId=sharedPreferences.getString("USERID","");
-        //check if the user id is current ID
-        if(message.getM_sender().equals(userId)){
-            holder.message_body.setBackgroundColor(Color.GRAY);
-
-        }else {
-            holder.message_body.setBackgroundColor(Color.GREEN);
-        }
-
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+           Message message=messages.get(position);
+           System.out.println("messageg size"+messages.size());
+           switch (holder.getItemViewType()){
+               case 1:
+                   final SendMessageViewHolder sendMessageViewHolder=(SendMessageViewHolder)holder;
+                    sendMessageViewHolder.body.setText(message.getM_message());
+                    break;
+               case 2:
+                   final ReceiveMessageViewHolder receiveMessageViewHolder=(ReceiveMessageViewHolder)holder;
+                  receiveMessageViewHolder.body.setText(message.getM_message());
+                  Picasso.with(context).load(FunctionsStatic.getProfileImageUrl(message.getM_sender()))
+                          .transform(new CircleTransformation())
+                          .error(R.drawable.ic_profile).resize(50,50).centerCrop()
+                          .placeholder(R.drawable.ic_profile_loading)
+                          .into(receiveMessageViewHolder.sender_pic);
+                  break;
+           }
 
     }
 
@@ -80,40 +94,57 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         return messages.size();
     }
 
-    //view holder class for holding message views
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+    //view holder class for sending message
+    public class SendMessageViewHolder extends RecyclerView.ViewHolder {
         //initialize views
-        public TextView id,sender,receiver,date,body;
+        public TextView date, body;
         LinearLayout message_body;
 
         //view holder constructer
-        public MyViewHolder(View view) {
+        public SendMessageViewHolder(View view) {
             super(view);
             //bind views
-            message_body=(LinearLayout)view.findViewById(R.id.message_body);
-            body=(TextView)view.findViewById(R.id.txt_msg_body);
-            id = (TextView) view.findViewById(R.id.txt_m_id);
-            sender = (TextView) view.findViewById(R.id.txt_m_sender);
-            receiver = (TextView) view.findViewById(R.id.txt_m_receiver);
-            date=(TextView)view.findViewById(R.id.txt_m_date);
+            body = (TextView) view.findViewById(R.id.txt_msg_body);
+            date = (TextView) view.findViewById(R.id.msg_date);
+
+
+        }
+        //view holder for receiving messages
+    }
+
+    public class ReceiveMessageViewHolder extends RecyclerView.ViewHolder {
+        //initialize views
+        public TextView date, body;
+        LinearLayout message_body;
+        ImageView sender_pic;
+
+        //view holder constructer
+        public ReceiveMessageViewHolder(View view) {
+            super(view);
+            //bind views
+
+            body = (TextView) view.findViewById(R.id.txt_msg_body);
+            date = (TextView) view.findViewById(R.id.msg_date);
+            sender_pic=(ImageView)view.findViewById(R.id.msg_sender_pc);
+
+
 
         }
 
 
-    }
-    //message adapter constructer
-    public MessageAdapter(List<Message> accList, Context context) {
-        this.context = context;
-        this.messages = accList;
-        setHasStableIds(true);
-    }
 
-    //method for adding message items
-    public  void  addItem(Message message){
+    }
+    //method for adding post items
+    public void addItem(Message message) {
+        messages.add(0,message);
+        notifyDataSetChanged();
+    }
+    public void addItemToBottom(Message message){
         messages.add(message);
         notifyDataSetChanged();
-
     }
+
 
 
 }

@@ -29,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,13 +47,15 @@ import java.util.List;
 import UI.CircleTransformation;
 import io.lmh.e.a3cs_akings.Fragment.ProfileFollowers;
 import io.lmh.e.a3cs_akings.Fragment.ProfilePost;
+import io.lmh.e.a3cs_akings.Message.MessageActivity;
+import io.lmh.e.a3cs_akings.Model.Message;
 import io.lmh.e.a3cs_akings.NetworkHelper.CheckConnection;
 import io.lmh.e.a3cs_akings.R;
 import io.lmh.e.a3cs_akings.Static.FunctionsStatic;
 import io.lmh.e.a3cs_akings.Static.VarStatic;
 
 public class UserProfileActivity extends AppCompatActivity {
-    private ImageView background, profile, imgmajor, imggender;
+    private ImageView background, profile, imgmajor, imggender,sendmessage;
     private String coverName, profileName;
     TabLayout profileTabs;
     ViewPager viewPager;
@@ -156,6 +159,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         //user info
         followBtn = (Button) findViewById(R.id.btn_profile_follow);
+        sendmessage=(ImageView)findViewById(R.id.send_message);
         accyear = (TextView) findViewById(R.id.pf_year);
         accbio = (TextView) findViewById(R.id.pf_bio);
         accmajor = (TextView) findViewById(R.id.pf_major);
@@ -190,6 +194,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         if (profileId.equals(userId)) {
             ((ViewManager) followBtn.getParent()).removeView(followBtn);
+            ((ViewManager)sendmessage.getParent()).removeView(sendmessage);
             self = "yes";
         }
 
@@ -199,6 +204,8 @@ public class UserProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setImages();
     }
+
+
 
 
     private void setUpViewPager(ViewPager viewPager) {
@@ -216,12 +223,47 @@ public class UserProfileActivity extends AppCompatActivity {
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .error(R.mipmap.background_placeholder)
                 .into(background);
-        Picasso.with(this).load(profileName).placeholder(R.mipmap.avator_placeholder).
+        Picasso.with(this).load(profileName).placeholder(R.drawable.ic_profile_loading).
                 transform(new CircleTransformation()).
                 resize(100, 100).centerCrop().
-                error(R.mipmap.avator_placeholder).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).
+                error(R.drawable.ic_profile).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).
                 into(profile);
     }
+    //on send message btn click
+
+    public void sendMessage(View view) {
+
+            String url = VarStatic.getHostName() + "/message/createmessageitem.php?userId=" +
+                    URLEncoder.encode(userId) + "&receiver=" + URLEncoder.encode(accId)
+                    + "&receivername=" + URLEncoder.encode(accname)+"&sendername="+URLEncoder.encode(FunctionsStatic.getUserName(this));
+
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            StringRequest stringReq = new StringRequest(StringRequest.Method.GET, url, new
+                    Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            System.out.println(s);
+                            if(s.equals("success")){
+                                Intent intent=new Intent(UserProfileActivity.this, MessageActivity.class);
+                                intent.putExtra("messageUserId",accId) ;
+                                startActivity(intent);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                }
+            }
+            );
+            requestQueue.add(stringReq);
+            requestQueue.start();
+
+
+
+    }
+
 
     public void onFollowButtonClick(View view) {
         if (followBtn.getText().equals("follow")) {
@@ -351,10 +393,10 @@ public class UserProfileActivity extends AppCompatActivity {
                 followerCount.setText(followers);
                 userName.setText(accname);
                 accbio.setText(about);
-                accyear.setText(year);
+
                 accmajor.setText(major);
                 accgender.setText(gender);
-
+                accyear.setText(year);
                 //set icons
                 if (major.equals("CS")) {
                     imgmajor.setImageResource(R.drawable.ic_cs);

@@ -17,7 +17,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppActivities">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppActivities.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,25 +27,38 @@
         </activity>
         <activity
             android:name=".MainTask"
-            android:label="@string/title_activity_main_task"
+            android:label="3cst"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".AboutActivity"
             android:parentActivityName=".MainTask"
             android:theme="@style/AppActivities" />
-        <activity android:name=".SignUp.SignUp" />
-        <activity android:name=".Login.Login" />
+        <activity android:name=".SignUp.SignUp"
+            android:theme="@style/AppActivities.NoActionBar"
+            android:label="3cst"/>
+        <activity android:name=".Login.Login"
+            android:theme="@style/AppActivities.NoActionBar"
+            android:label="3cst"/>
         <activity
+            android:label="3cst"
             android:name=".Profile.UserProfileActivity"
             android:parentActivityName=".MainTask" />
         <activity
+            android:label="3cst"
             android:name=".Profile.EditProfileActivity"
             android:parentActivityName=".Profile.UserProfileActivity" />
         <activity
+            android:label="3cst"
             android:name=".comment.Comment"
             android:theme="@style/AppActivities.NoActionBar" />
-        <activity android:name=".CreatePost"
-            android:theme="@style/AppActivities.NoActionBar"></activity>
+        <activity
+
+            android:name=".CreatePost"
+            android:theme="@style/AppActivities.NoActionBar" />
+        <activity android:name=".SignUp.PhoneAuthorization"
+            android:label="3cst"/>
+        <activity android:name=".Message.MessageActivity"
+            android:label="3cst"/>
     </application>
 
 </manifest>

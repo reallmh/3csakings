@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,12 +39,10 @@ import io.lmh.e.a3cs_akings.Static.ImageStatic;
 import io.lmh.e.a3cs_akings.Static.UIStatic;
 import io.lmh.e.a3cs_akings.Static.VarStatic;
 
-import static android.R.attr.data;
-
 public class CreatePost extends AppCompatActivity {
-    String imageurl="";
+    String imageurl = "";
     String postText;
-    String userId,userName;
+    String userId, userName;
 
     EditText edtPost;
     ImageView imgPost;
@@ -61,13 +58,12 @@ public class CreatePost extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Uri selectedImage = data.getData();
                 imageurl = getPath(selectedImage);
-                System.out.println("file path is " + imageurl);
                 if (!imageurl.equals(null)) {
                     File file = new File(imageurl);
                     Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                     Picasso.with(getApplicationContext())
                             .load(file)
-                            .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).
+                            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).
                             placeholder(R.mipmap.background_placeholder).
                             error(R.mipmap.background_placeholder)
                             .into(imgPost);
@@ -82,6 +78,7 @@ public class CreatePost extends AppCompatActivity {
             }
         }
     }
+
     private String getPath(Uri uri) {
         String[] projection = {MediaStore.MediaColumns.DATA};
         Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -92,14 +89,15 @@ public class CreatePost extends AppCompatActivity {
 
         return cursor.getString(column_index);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
-        context=getApplicationContext();
-        userId= FunctionsStatic.getUserId(this);
-        userName=FunctionsStatic.getUserName(this);
+        context = getApplicationContext();
+        userId = FunctionsStatic.getUserId(this);
+        userName = FunctionsStatic.getUserName(this);
         //initialize
         edtPost = (EditText) findViewById(R.id.edt_post_text);
         imgPost = (ImageView) findViewById(R.id.img_post);
@@ -107,9 +105,10 @@ public class CreatePost extends AppCompatActivity {
         //
 
     }
+
     public void onCreatePost(View view) {
-            postText=edtPost.getText().toString();
-            new PostPost().execute();
+        postText = edtPost.getText().toString();
+        new PostPost().execute();
     }
 
     public void onChooseImage(View view) {
@@ -135,14 +134,12 @@ public class CreatePost extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-
-            System.out.println(s);
-
             super.onPostExecute(s);
             if (!s.equals("false")) {
-                UIStatic.showSnack(getWindow(), "Success,Images updated", "success");
+                UIStatic.showSnack(getWindow(), "Successfully posted", "success");
+                finish();
             } else {
-                UIStatic.showSnack(getWindow(), "Error updating Images", "error");
+                UIStatic.showSnack(getWindow(), "Error posting...", "error");
             }
 
         }
@@ -158,14 +155,14 @@ public class CreatePost extends AppCompatActivity {
                 String background = ImageStatic.getFileInString(imageurl);
                 nameValuePairs.add(new BasicNameValuePair("img", background));
             }
-            nameValuePairs.add(new BasicNameValuePair("username",userName));
-            nameValuePairs.add(new BasicNameValuePair("posttext",postText));
+            nameValuePairs.add(new BasicNameValuePair("username", userName));
+            nameValuePairs.add(new BasicNameValuePair("posttext", postText));
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = null;
             httppost = new HttpPost(VarStatic.getHostName() + "/post/createpost.php");
             try {
 
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -174,7 +171,7 @@ public class CreatePost extends AppCompatActivity {
                 HttpResponse response = httpclient.execute(httppost);
                 HttpEntity entity = response.getEntity();
                 ans = EntityUtils.toString(entity);
-                System.out.println(ans);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

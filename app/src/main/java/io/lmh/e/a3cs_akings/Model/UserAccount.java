@@ -10,18 +10,22 @@ public class UserAccount {
     String us_password;
     String us_phno;
     String us_followed;
+    String isEc;
+
+    public String getIsEc() {
+        return isEc;
+    }
+
+    public void setIsEc(String isEc) {
+        this.isEc = isEc;
+    }
 
     public UserAccount(String us_id, String us_name) {
         this.us_id = us_id;
         this.us_name = us_name;
     }
 
-    public UserAccount(String us_id, String us_name, String us_password, String us_phno) {
-        this.us_id = us_id;
-        this.us_name = us_name;
-        this.us_password = us_password;
-        this.us_phno = us_phno;
-    }
+
 
     public UserAccount() {
     }
@@ -62,6 +66,13 @@ public class UserAccount {
 
     public void setUs_phno(String us_phno) {
         this.us_phno = us_phno;
+    }
+
+    public UserAccount(String us_id, String us_name, String us_followed, String isEc) {
+        this.us_id = us_id;
+        this.us_name = us_name;
+        this.us_followed = us_followed;
+        this.isEc = isEc;
     }
 
     public String getUs_followed() {

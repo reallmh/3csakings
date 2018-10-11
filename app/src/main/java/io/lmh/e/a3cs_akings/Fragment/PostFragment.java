@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.lmh.e.a3cs_akings.Model.Post;
-import io.lmh.e.a3cs_akings.NetworkHelper.CheckConnection;
 import io.lmh.e.a3cs_akings.R;
 import io.lmh.e.a3cs_akings.Static.FunctionsStatic;
-import io.lmh.e.a3cs_akings.Static.UIStatic;
 import io.lmh.e.a3cs_akings.Static.VarStatic;
 import io.lmh.e.a3cs_akings.UIAdapters.PostAdapter;
 
@@ -49,19 +48,21 @@ import io.lmh.e.a3cs_akings.UIAdapters.PostAdapter;
  */
 
 public class PostFragment extends android.support.v4.app.Fragment {
-    private SwipeRefreshLayout refreshLayout;
     private static String USERID;
+    private LinearLayout errorPage;
+    private LayoutInflater inflater;
+
+    private SharedPreferences sharedPreferences = null;
+    private SharedPreferences.Editor sharePrefEditor = null;
+
+    private static String oldestpostid = "0";
+    private static String latestpostid;
+
+    private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerPost;
     private RecyclerView.LayoutManager mLayoutManager;
     private PostAdapter postAdapter;
     private List<Post> posts;
-    LinearLayout errorPage;
-    LayoutInflater inflater;
-    CheckConnection checkConnection;
-    private String latestpostid = "0";
-    SharedPreferences sharedPreferences = null;
-    SharedPreferences.Editor sharePrefEditor = null;
-    String oldestpostid="0";
 
 
     @Override
@@ -81,16 +82,14 @@ public class PostFragment extends android.support.v4.app.Fragment {
         //crete if not exits ,share pref
         sharedPreferences = getActivity().getSharedPreferences("postconfig", Context.MODE_PRIVATE);
         sharePrefEditor = sharedPreferences.edit();
-        System.out.println(sharedPreferences.getString("latestpostid", ""));
-
 
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_post);
         recyclerPost = (RecyclerView) view.findViewById(R.id.recycler_post);
         errorPage = (LinearLayout) view.findViewById(R.id.post_err);
-        checkConnection = new CheckConnection();
         USERID = FunctionsStatic.getUserId(getActivity());
 
         setUpPostFragment();
+
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -99,6 +98,8 @@ public class PostFragment extends android.support.v4.app.Fragment {
                 refreshLayout.setRefreshing(false);
             }
         });
+
+        //on post refresh
         recyclerPost.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -108,11 +109,12 @@ public class PostFragment extends android.support.v4.app.Fragment {
                 int lastVisible = linearLayoutManager.findLastCompletelyVisibleItemPosition();
                 boolean endReached = lastVisible + 1 >= totalitemCount;
                 if (totalitemCount > 0 && endReached) {
-                    System.out.println("end reached");
                     new GetOlderPosts().execute();
                 }
             }
         });
+
+
     }
 
     @Override
@@ -125,15 +127,15 @@ public class PostFragment extends android.support.v4.app.Fragment {
     }
 
     public void showErrorPage() {
-        System.out.println("error shown");
         posts.add(new Post("", "", "", "", "", "", "", "", ""));
 
     }
 
-    public void showPostPage() {
-        System.out.println("posts shown");
-    }
 
+    public void commitOldestId() {
+        if (posts.size() > 1)
+            oldestpostid = posts.get(posts.size() - 1).getPost_id();
+    }
 
     public void setUpPostFragment() {
         posts = new ArrayList<>();
@@ -144,29 +146,57 @@ public class PostFragment extends android.support.v4.app.Fragment {
 
     }
 
-    public void getLastViewedPost() {
-        latestpostid = sharedPreferences.getString("latestpostid", "");
-    }
-    public String getSamllestPostId(){
-        if(posts.size()>4){
-            return posts.get(posts.size()-1).getPost_id();
-        }
-        return "0";
+    public String getBiggestPostId(){
+        if (posts.size() > 1)
+          return   posts.get(0).getPost_id();
+        else return "0";
     }
 
+    public String getSamllestPostId() {
+        commitOldestId();
+        System.out.println("latest pppppppppppp"+oldestpostid);
+        return oldestpostid;
 
-
-    public void commitLatestPostId() {
-        if (posts.size() > 1) {
-            sharePrefEditor.putString("latestpostid", posts.get(0).getPost_id());
-            sharePrefEditor.commit();
-            latestpostid = sharedPreferences.getString("latestpostid", "");
-        }
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
+        posts.clear();
+        new GetPosts().execute();
+    }
+
+    //check latest posts
+    public void checkLatestPosts() {
+
+        System.out.println("lat post" +getBiggestPostId());
+        String url = VarStatic.getHostName() + "/post/checknewposts.php?userId=" +
+                URLEncoder.encode(USERID)
+                + "&latestpostid=" + URLEncoder.encode(getBiggestPostId());
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        StringRequest stringReq = new StringRequest(StringRequest.Method.GET, url, new
+                Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        if (s.equals("yes")) {
+                            new GetLatestPost().execute();
+
+                        } else {
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }
+        );
+        requestQueue.add(stringReq);
+        requestQueue.start();
     }
 
     private class GetPosts extends AsyncTask<String, String, String> {
@@ -199,6 +229,8 @@ public class PostFragment extends android.support.v4.app.Fragment {
                     Post post = new Post(id, accId, accName, postBody, date, comments, likes, isPhoto,
                             liked);
                     posts.add(post);
+
+
                 }
 
 
@@ -213,11 +245,9 @@ public class PostFragment extends android.support.v4.app.Fragment {
             recyclerPost.setItemAnimator(new DefaultItemAnimator());
             recyclerPost.setAdapter(postAdapter);
             refreshLayout.setRefreshing(false);
-            commitLatestPostId();
             if (iserr) {
                 showErrorPage();
             } else {
-                showPostPage();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -231,13 +261,11 @@ public class PostFragment extends android.support.v4.app.Fragment {
                                 checkLatestPosts();
                             }
                         } catch (Exception e) {
-                            System.out.println("checking error");
                         }
                     }
                 }).start();
+
             }
-
-
 
 
         }
@@ -264,7 +292,6 @@ public class PostFragment extends android.support.v4.app.Fragment {
                     ans += s + "\n";
                 }
                 conn.disconnect();
-                System.out.println(ans);
                 return ans;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -276,7 +303,6 @@ public class PostFragment extends android.support.v4.app.Fragment {
             return ans;
         }
     }
-
 
     //get latest post
     private class GetLatestPost extends AsyncTask<String, String, String> {
@@ -291,7 +317,7 @@ public class PostFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            System.out.println("latest in getnewpostsasyn" + latestpostid);
+            commitOldestId();
             super.onPostExecute(s);
             try {
                 JSONArray jsonArray = new JSONArray(s);
@@ -308,7 +334,10 @@ public class PostFragment extends android.support.v4.app.Fragment {
                     String liked = object.getString("liked");
                     Post post = new Post(id, accId, accName, postBody, date, comments, likes, isPhoto,
                             liked);
-                    newposts.add(post);
+                    for (Post p : newposts) {
+                        if (!p.getPost_id().equals(post.getPost_id()))
+                            newposts.add(post);
+                    }
 
                 }
 
@@ -316,7 +345,6 @@ public class PostFragment extends android.support.v4.app.Fragment {
                     postAdapter.addItem(p);
                 }
                 newposts.clear();
-                commitLatestPostId();
 
 
             } catch (JSONException e) {
@@ -328,14 +356,14 @@ public class PostFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+            Log.d("smalle","smallest");System.out.println("get smallest post id");
             String ans = "";
-            System.out.println("smallest id is"+getSamllestPostId());
             URL url = null;
             try {
                 url = new URL(VarStatic.getHostName() + "/post/getnewposts" +
                         ".php?userId=" +
                         URLEncoder.encode(USERID)
-                        + "&latestpostid=" + URLEncoder.encode(latestpostid));
+                        + "&latestpostid=" + URLEncoder.encode(getBiggestPostId()));
 
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setConnectTimeout(5000);
@@ -351,7 +379,6 @@ public class PostFragment extends android.support.v4.app.Fragment {
                     ans += s + "\n";
                 }
                 conn.disconnect();
-                System.out.println(ans);
                 return ans;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -360,37 +387,6 @@ public class PostFragment extends android.support.v4.app.Fragment {
             }
             return ans;
         }
-    }
-
-    //check latest posts
-    public void checkLatestPosts() {
-        System.out.println("latest post id " + latestpostid);
-        String url = VarStatic.getHostName() + "/post/checknewposts.php?userId=" +
-                URLEncoder.encode(USERID)
-                + "&latestpostid=" + URLEncoder.encode(latestpostid);
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        StringRequest stringReq = new StringRequest(StringRequest.Method.GET, url, new
-                Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        if (s.equals("yes")) {
-                            new GetLatestPost().execute();
-                            UIStatic.showSnack(getActivity().getWindow(), "posts updated", "success");
-                        } else {
-
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-            }
-        }
-        );
-        requestQueue.add(stringReq);
-        requestQueue.start();
     }
 
     private class GetOlderPosts extends AsyncTask<String, String, String> {
@@ -421,7 +417,10 @@ public class PostFragment extends android.support.v4.app.Fragment {
                     String liked = object.getString("liked");
                     Post post = new Post(id, accId, accName, postBody, date, comments, likes, isPhoto,
                             liked);
-                    olderposts.add(post);
+                    for (Post p : olderposts) {
+                        if (!p.getPost_id().equals(post.getPost_id()))
+                            olderposts.add(post);
+                    }
 
                 }
 
@@ -429,7 +428,7 @@ public class PostFragment extends android.support.v4.app.Fragment {
                     postAdapter.addItemToBottom(p);
                 }
                 olderposts.clear();
-                commitLatestPostId();
+                commitOldestId();
 
 
             } catch (JSONException e) {
@@ -447,7 +446,7 @@ public class PostFragment extends android.support.v4.app.Fragment {
                 url = new URL(VarStatic.getHostName() + "/post/getoldernewposts" +
                         ".php?userId=" +
                         URLEncoder.encode(USERID)
-                        + "&latestpostid=" + URLEncoder.encode(latestpostid));
+                        + "&latestpostid=" + URLEncoder.encode(getSamllestPostId()));
 
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setConnectTimeout(5000);
@@ -463,7 +462,6 @@ public class PostFragment extends android.support.v4.app.Fragment {
                     ans += s + "\n";
                 }
                 conn.disconnect();
-                System.out.println(ans);
                 return ans;
             } catch (MalformedURLException e) {
                 e.printStackTrace();

@@ -23,6 +23,7 @@ import java.util.List;
 
 import UI.CircleTransformation;
 import io.lmh.e.a3cs_akings.Model.Post;
+import io.lmh.e.a3cs_akings.Profile.UserProfileActivity;
 import io.lmh.e.a3cs_akings.R;
 import io.lmh.e.a3cs_akings.Static.FunctionsStatic;
 import io.lmh.e.a3cs_akings.Static.VarStatic;
@@ -116,7 +117,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if (post.getLiked().equals("yes")) {
                     holderpost.love.setImageResource(R.drawable.ic_like_after);
                 }
-                Picasso.with(context).load(coverName).resize(90, 90).transform(new CircleTransformation()).into(holderpost.profile_pic);
+                Picasso.with(context).load(coverName).resize(90, 90)
+                        .placeholder(R.drawable.ic_profile_loading)
+                        .error(R.drawable.ic_profile)
+                        .transform(new CircleTransformation())
+                        .into(holderpost.profile_pic);
                 holderpost.post_acc.setText(post.getAcc_name());
                 holderpost.post_comment.setText(post.getComments());
                 holderpost.post_like.setText(post.getLikes());
@@ -243,6 +248,16 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         //put current post object to comment activity
                         Intent intent = new Intent(context, Comment.class);
                         intent.putExtra("post", post);
+                        v.getContext().startActivity(intent);
+                    }
+                });
+
+
+                holderpost.profile_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(context, UserProfileActivity.class);
+                        intent.putExtra("profileId",post.getAcc_id());
                         v.getContext().startActivity(intent);
                     }
                 });
@@ -385,6 +400,15 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         //put current post object to comment activity
                         Intent intent = new Intent(context, Comment.class);
                         intent.putExtra("post", post);
+                        v.getContext().startActivity(intent);
+                    }
+                });
+
+                holderpostimage.profile_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(context, UserProfileActivity.class);
+                        intent.putExtra("profileId",post.getAcc_id());
                         v.getContext().startActivity(intent);
                     }
                 });

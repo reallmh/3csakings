@@ -1,21 +1,21 @@
 <android.support.v4.widget.SwipeRefreshLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/refresh_profile"
-    layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/refresh_profile">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="1"
         android:layout_marginTop="30dp"
-        android:paddingTop="50dp">
+        android:paddingTop="50dp"
+        android:id="@+id/profile_error">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="93dp"
-        app:srcCompat="@drawable/ic_err"
-        android:id="@+id/imageView" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="93dp"
+            app:srcCompat="@drawable/ic_err"
+            android:id="@+id/imageView" />
         <TextView
             android:text="Sorry,It looks like a network error,pull to refresh"
             android:layout_width="match_parent"
@@ -25,3 +25,7 @@
             android:textStyle="normal|bold" />
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+

@@ -112,19 +112,28 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/send_message"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:onClick="sendMessage"
+                app:srcCompat="@drawable/ic_mail_outline_black_24dp" />
+
             <Button
-                android:text="follow"
                 android:id="@+id/btn_profile_follow"
-                android:layout_gravity="right"
-                android:textAllCaps="false"
-                android:textAlignment="center"
-                android:background="@drawable/follow_button"
-                android:layout_weight="0.24"
-                android:layout_width="wrap_content"
-                android:textColor="#4995f2"
-                android:textStyle="normal|bold"
+                android:layout_width="100dp"
                 android:layout_height="30dp"
-                android:onClick="onFollowButtonClick" />
+                android:layout_gravity="right"
+                android:layout_weight="0.24"
+                android:background="@drawable/follow_button"
+                android:onClick="onFollowButtonClick"
+                android:text="follow"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#4995f2"
+                android:textStyle="normal|bold" />
+
+
 
         </LinearLayout>
 
@@ -137,7 +146,6 @@
                 android:id="@+id/profile_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
                 app:tabIndicatorColor="@android:color/holo_blue_dark" />
 
             <include layout="@layout/content_tab_profile"

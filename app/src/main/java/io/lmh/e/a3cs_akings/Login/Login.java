@@ -109,6 +109,7 @@ public class Login extends AppCompatActivity {
                 editor.commit();
                 Intent intent=new Intent(getApplicationContext(), MainTask.class);
                 startActivity(intent);
+                finish();
 
             }}else {
                 status.setTextColor(Color.RED);

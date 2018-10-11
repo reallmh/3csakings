@@ -43,7 +43,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
 
             final Comment comment = commentList.get(position);
             picUrl= FunctionsStatic.getProfileImageUrl(comment.getAcc_id());
-            Picasso.with(context).load(picUrl).transform(new CircleTransformation()).resize(50,50).into(holder.comment_profile);
+            Picasso.with(context).load(picUrl).transform(new CircleTransformation()).placeholder(R.drawable.ic_profile_loading).resize(50,50).into(holder.comment_profile);
             holder.commentbody.setText(comment.getComment_body());
             holder.name.setText(comment.getAcc_name());
             String niceDate=FunctionsStatic.getNiceTime(comment.getDate());

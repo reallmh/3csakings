@@ -102,7 +102,7 @@ public class ProfileFollowers extends android.support.v4.app.Fragment {
                     String id=object.getString("id");
                     String name=object.getString("name");
                     String followed=object.getString("followed");
-                    UserAccount acc=new UserAccount(id,name,followed);
+                    UserAccount acc=new UserAccount(id,name,followed,"no");
                     accounts.add(acc);
                     System.out.println("acc id "+acc.getUs_id());
 

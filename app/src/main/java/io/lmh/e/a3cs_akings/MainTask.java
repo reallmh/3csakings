@@ -1,5 +1,6 @@
 package io.lmh.e.a3cs_akings;
 
+import android.app.IntentService;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +13,6 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,11 +37,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import UI.CircleTransformation;
-import io.lmh.e.a3cs_akings.Fragment.ActiveFragment;
-import io.lmh.e.a3cs_akings.Fragment.NotiFragment;
+import io.lmh.e.a3cs_akings.Fragment.MessageFragment;
+import io.lmh.e.a3cs_akings.Fragment.NotificationFragment;
 import io.lmh.e.a3cs_akings.Fragment.PeopleListFragment;
 import io.lmh.e.a3cs_akings.Fragment.PostFragment;
+import io.lmh.e.a3cs_akings.Fragment.SearchFragment;
+import io.lmh.e.a3cs_akings.Message.MessageListFragment;
 import io.lmh.e.a3cs_akings.Profile.UserProfileActivity;
+import io.lmh.e.a3cs_akings.Services.ActiveReporter;
 import io.lmh.e.a3cs_akings.Static.FunctionsStatic;
 
 public class MainTask extends AppCompatActivity
@@ -57,8 +60,12 @@ public class MainTask extends AppCompatActivity
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private int tabIcons[] = {R.drawable.ic_chat_bubble_outline_black_24dp, R.drawable.ic_people_outline_black_24dp, R.drawable.ic_wifi_tethering_black_24dp, R.drawable.ic_notifications_none_black_24dp};
+    private int tabIcons[] = {R.drawable.ic_chat_bubble_outline_black_24dp, R.drawable.ic_people_outline_black_24dp, R.drawable.ic_mail_outline_black_24dp,R.drawable.ic_notifications_none_black_24dp};
     private TextView accountName, accountInfo;
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
 
     @Override
     protected void onResume() {
@@ -93,6 +100,8 @@ public class MainTask extends AppCompatActivity
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
+
+       
         //
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +120,9 @@ public class MainTask extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
     }
 
     //setting account info
@@ -161,8 +173,8 @@ public class MainTask extends AppCompatActivity
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new PostFragment(), "post");
         adapter.addFragment(new PeopleListFragment(), "people");
-        adapter.addFragment(new ActiveFragment(), "active");
-        adapter.addFragment(new NotiFragment(), "noti");
+        adapter.addFragment(new MessageListFragment(), "message");
+        adapter.addFragment(new NotificationFragment(),"noti");
         viewPager.setAdapter(adapter);
     }
 
@@ -261,7 +273,7 @@ public class MainTask extends AppCompatActivity
         }
 
         public CharSequence getPageTitle(int position) {
-            return mFragmentName.get(position);
+            return null;
         }
 
     }

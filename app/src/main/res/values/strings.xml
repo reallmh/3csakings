@@ -11,4 +11,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="about">About</string>
     <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="firebase_web_api_key">AIzaSyDSU9vB6BN28NwUbXFpD3cWTASQjE_eR3E</string>
+    <string name="firebase_project_id">csakings-b4901</string>
 </resources>

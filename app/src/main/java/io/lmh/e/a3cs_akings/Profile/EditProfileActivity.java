@@ -163,12 +163,12 @@ public class EditProfileActivity extends AppCompatActivity {
                 .centerCrop().into(cover_image);
         Picasso.with(getApplicationContext())
                 .load(profileName)
-                .placeholder(R.mipmap.avator_placeholder)
+                .placeholder(R.drawable.ic_profile_loading)
                 .transform(new CircleTransformation())
                 .centerCrop()
                 .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
                 .resize(85, 85)
-                .error(R.mipmap.avator_placeholder)
+                .error(R.drawable.ic_profile)
                 .into(profile_image);
 
         //on click listeners
@@ -366,7 +366,8 @@ public class EditProfileActivity extends AppCompatActivity {
             URL url = null;
             try {
                 url = new URL(VarStatic.getHostName() + "/profile/get_profile_info.php?userId=" +
-                        URLEncoder.encode(userId) + "&profileId=" + URLEncoder.encode(userId));
+                        URLEncoder.encode(userId) + "&profileId=" + URLEncoder.encode(userId)
+                +"&self="+URLEncoder.encode("no"));
                 conn = (HttpURLConnection) url.openConnection();
                 conn.connect();
                 InputStream in = null;

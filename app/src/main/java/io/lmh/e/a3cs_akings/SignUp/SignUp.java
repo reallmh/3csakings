@@ -1,6 +1,7 @@
 package io.lmh.e.a3cs_akings.SignUp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
@@ -10,6 +11,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthProvider;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,6 +47,8 @@ public class SignUp extends AppCompatActivity {
         ConfirmPassword = (EditText) findViewById(R.id.edt_pass_confirm);
         PhoneNo = (EditText) findViewById(R.id.edt_phone_no);
 
+
+
     }
 
     public void onClear(View view) {
@@ -57,7 +63,6 @@ public class SignUp extends AppCompatActivity {
     }
 
     public void onCreateAccount(View view) {
-        System.out.println("create acc clicked");
         accName = Name.getText().toString();
         accPassword = Password.getText().toString();
         accConfirmPassword = ConfirmPassword.getText().toString();
@@ -95,12 +100,12 @@ public class SignUp extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            System.out.println("returned" + ans);
             progressDialog.hide();
             if(ans.equals("success")){
                 tvStatus.setText("Succefull created an account");
                 tvStatus.setTextColor(Color.GREEN);
                 clearTextViews();
+                finish();
             }else{
                 tvStatus.setText("Something went wrong,is your internet working?");
                 tvStatus.setTextColor(Color.RED);
@@ -137,9 +142,7 @@ public class SignUp extends AppCompatActivity {
 
                 }
 
-                System.out.println("Success Connection");
                 conn.disconnect();
-                System.out.println("returned is" + ans);
                 return ans;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
