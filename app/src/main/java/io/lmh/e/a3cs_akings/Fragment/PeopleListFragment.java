@@ -206,6 +206,7 @@ public class PeopleListFragment extends Fragment {
             String ans = "";
             URL url = null;
             try {
+                commitEarliestAccountId();
                 url = new URL(VarStatic.getHostName() + "/people/getearlierpeople.php?userId=" +
                         URLEncoder.encode(userId) + "&earliestid=" + URLEncoder.encode(earliestaccount));
                 conn = (HttpURLConnection) url.openConnection();

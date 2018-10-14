@@ -40,5 +40,4 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:24.2.1'
     compile files('libs/picasso-2.5.2.jar')
     compile 'com.google.android.gms:play-services:9.6.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
